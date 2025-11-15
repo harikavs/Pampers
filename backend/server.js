@@ -1,6 +1,12 @@
 const express = require("express");
 const cors = require("cors");
 
+// Enable importing TypeScript files at runtime
+require("ts-node").register({ transpileOnly: true });
+
+// Import Girl 1's AI orchestrator
+const { handleChat } = require("./ai/index"); // from ai/index.ts
+
 const app = express();
 const PORT = 4000;
 
@@ -13,27 +19,36 @@ app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
 });
 
-// Chat endpoint
-app.post("/api/chat", (req, res) => {
-  const { message } = req.body;
+// Chat endpoint – now uses real AI
+app.post("/api/chat", async (req, res) => {
+  try {
+    const { message } = req.body;
 
-  // Dummy response
-  res.json({
-    spec: { name: "example_campaign" },
-    journey: { steps: [] },
-    copy: { en: "dummy copy" },
-    qa: { status: "ok" },
-  });
+    if (!message) {
+      return res.status(400).json({ error: "message is required" });
+    }
+
+    // Call Girl 1's TypeScript AI function
+    const result = await handleChat(message);
+    // result should be: { spec, journey, messages, qa }
+    res.json(result);
+  } catch (err) {
+    console.error("Error in /api/chat:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 app.post("/api/go-live", (req, res) => {
-  const { spec, journey, copy } = req.body;
+  // Expect the same shape the frontend gets from /api/chat
+  const { spec, journey, messages, qa } = req.body;
 
   console.log("Go-live called with:");
   console.log("spec:", spec);
   console.log("journey:", journey);
-  console.log("copy:", copy);
+  console.log("messages:", messages);
+  console.log("qa:", qa);
 
+  // Here you could call Braze API if you want.
   res.json({
     status: "ok",
     brazeCampaignId: "mock_campaign_001",

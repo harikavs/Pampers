@@ -59,4 +59,12 @@ export interface ChannelMessage {
     issues: QAItem[];
     warnings: QAItem[];
   }
+
+  export interface ChatResponse {
+    spec: CampaignSpec;
+    journey: JourneyBlueprint;
+    messages: MultiLanguageMessages;
+    qa: QAReport;
+  }
+  
   
