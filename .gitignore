@@ -4,3 +4,14 @@ dist/
 .next/
 .DS_Store
 __pycache__/
+
+# Backend specific
+backend/node_modules/
+backend/.env
+
+# Frontend specific (if exists)
+frontend/node_modules/
+frontend/.env
+
+# Cursor internal folder
+.cursor/
