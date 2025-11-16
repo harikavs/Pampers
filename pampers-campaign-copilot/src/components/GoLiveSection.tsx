@@ -1,6 +1,7 @@
 import { Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { getFriendlyCampaignName } from "@/lib/campaignNames";
 import type { ChatResponse } from "@/lib/api";
 
 interface GoLiveSectionProps {
@@ -8,9 +9,10 @@ interface GoLiveSectionProps {
   loading: boolean;
   disabled?: boolean;
   spec?: ChatResponse["spec"] | null;
+  qa?: ChatResponse["qa"] | null;
 }
 
-export const GoLiveSection = ({ onGoLive, loading, disabled, spec }: GoLiveSectionProps) => {
+export const GoLiveSection = ({ onGoLive, loading, disabled, spec, qa }: GoLiveSectionProps) => {
   const { toast } = useToast();
 
   const handleLaunch = async () => {
@@ -46,7 +48,7 @@ export const GoLiveSection = ({ onGoLive, loading, disabled, spec }: GoLiveSecti
           <div className="grid grid-cols-2 gap-4">
             <div>
               <p className="text-xs text-muted-foreground mb-1">Campaign Name</p>
-              <p className="text-sm font-medium text-foreground">{spec.campaign_name}</p>
+              <p className="text-sm font-medium text-foreground">{getFriendlyCampaignName(spec.campaign_name)}</p>
             </div>
             <div>
               <p className="text-xs text-muted-foreground mb-1">Markets</p>
@@ -64,11 +66,21 @@ export const GoLiveSection = ({ onGoLive, loading, disabled, spec }: GoLiveSecti
         </div>
       )}
 
+      {qa && !qa.passed && qa.issues.length > 0 && (
+        <div className="bg-warning/10 border border-warning/20 rounded-xl p-4 mb-6">
+          <p className="text-sm font-semibold text-warning mb-1">⚠️ QA Issues Detected</p>
+          <p className="text-xs text-muted-foreground">
+            There are {qa.issues.length} error(s) that must be fixed before launching.
+          </p>
+        </div>
+      )}
+
       <Button
         onClick={handleLaunch}
         disabled={disabled || loading}
         size="lg"
         className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
+        title={qa && !qa.passed && qa.issues.length > 0 ? "Fix QA errors before launching" : "Launch campaign"}
       >
         <Rocket className="w-5 h-5 mr-2" />
         {loading ? "Launching..." : "🚀 Launch Campaign"}

@@ -1,5 +1,6 @@
 import { Calendar, Globe, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { getFriendlyCampaignName } from "@/lib/campaignNames";
 import type { ChatResponse } from "@/lib/api";
 
 interface SimulationSectionProps {
@@ -7,6 +8,16 @@ interface SimulationSectionProps {
   journey: ChatResponse["journey"];
   messages: ChatResponse["messages"];
 }
+
+const getFriendlyChannelName = (channel: string): string => {
+  const channelMap: { [key: string]: string } = {
+    push: "Push Notification",
+    email: "Email",
+    inbox: "In-App Inbox",
+    slide_up: "Slide Up",
+  };
+  return channelMap[channel] || channel;
+};
 
 export const SimulationSection = ({ spec, journey, messages }: SimulationSectionProps) => {
   // Safety checks
@@ -108,11 +119,11 @@ export const SimulationSection = ({ spec, journey, messages }: SimulationSection
           </div>
           <div className="bg-background p-4 rounded-xl">
             <p className="text-xs text-muted-foreground mb-1">Channels</p>
-            <p className="text-sm font-medium text-foreground">{spec.channels.join(", ")}</p>
+            <p className="text-sm font-medium text-foreground">{spec.channels.map(getFriendlyChannelName).join(", ")}</p>
           </div>
           <div className="bg-background p-4 rounded-xl">
             <p className="text-xs text-muted-foreground mb-1">Campaign Name</p>
-            <p className="text-sm font-medium text-foreground">{spec.campaign_name}</p>
+            <p className="text-sm font-medium text-foreground">{getFriendlyCampaignName(spec.campaign_name)}</p>
           </div>
         </div>
       </div>

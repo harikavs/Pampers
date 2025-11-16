@@ -8,8 +8,8 @@ export const runQA = async (
   const issues: QAItem[] = [];
   const warnings: QAItem[] = [];
 
-  // Check if this is a RAF campaign
-  const isRAF = spec.campaign_name.startsWith("RAF_") || spec.campaign_type === "promotional";
+  // Check if this is a RAF campaign (only by name, not by type)
+  const isRAF = spec.campaign_name.startsWith("RAF_");
 
   // Promo checks (promotional campaigns only)
   if (spec.campaign_type === "promotional") {

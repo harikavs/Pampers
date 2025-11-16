@@ -28,36 +28,53 @@ export const HypercareSection = ({ onHypercare, loading, disabled, hypercare }: 
     aiInsights: [],
   };
 
-  // Transform stats to metrics format
+  // Transform stats to metrics format with proper rate calculations
+  const openRate = displayData.stats.sends > 0
+    ? Math.round((displayData.stats.opens / displayData.stats.sends) * 100)
+    : 0;
+  
+  const clickRate = displayData.stats.opens > 0
+    ? Math.round((displayData.stats.clicks / displayData.stats.opens) * 100)
+    : null; // null means N/A (no opens to calculate from)
+  
+  const referralRate = displayData.stats.clicks > 0
+    ? Math.round((displayData.stats.referrals / displayData.stats.clicks) * 100)
+    : null;
+  
+  const optOutRate = displayData.stats.sends > 0
+    ? ((displayData.stats.optOuts / displayData.stats.sends) * 100).toFixed(2)
+    : "0.00";
+
   const metrics = [
     {
       label: "Sends",
       value: displayData.stats.sends.toLocaleString(),
-      change: "+0%",
+      rate: null,
+      description: "Total messages sent",
     },
     {
       label: "Opens",
       value: displayData.stats.opens.toLocaleString(),
-      change: displayData.stats.sends > 0 
-        ? `+${Math.round((displayData.stats.opens / displayData.stats.sends) * 100)}%`
-        : "+0%",
+      rate: openRate,
+      description: `${openRate}% open rate`,
     },
     {
       label: "Clicks",
       value: displayData.stats.clicks.toLocaleString(),
-      change: displayData.stats.opens > 0
-        ? `+${Math.round((displayData.stats.clicks / displayData.stats.opens) * 100)}%`
-        : "+0%",
+      rate: clickRate,
+      description: clickRate !== null ? `${clickRate}% click-through rate` : "No opens yet",
     },
     {
       label: "Referrals",
       value: displayData.stats.referrals.toLocaleString(),
-      change: "+0%",
+      rate: referralRate,
+      description: referralRate !== null ? `${referralRate}% conversion rate` : "No clicks yet",
     },
     {
       label: "Opt-outs",
       value: displayData.stats.optOuts.toLocaleString(),
-      change: "+0%",
+      rate: parseFloat(optOutRate),
+      description: `${optOutRate}% opt-out rate`,
     },
   ];
 
@@ -91,10 +108,32 @@ export const HypercareSection = ({ onHypercare, loading, disabled, hypercare }: 
           <div key={index} className="bg-background p-5 rounded-xl border border-border">
             <div className="flex items-center justify-between mb-2">
               <p className="text-xs text-muted-foreground">{metric.label}</p>
-              <TrendingUp className="w-4 h-4 text-success" />
+              {metric.rate !== null && metric.rate > 0 && (
+                <TrendingUp className="w-4 h-4 text-success" />
+              )}
             </div>
             <p className="text-3xl font-bold text-foreground mb-1">{metric.value}</p>
-            <p className="text-xs text-success">vs previous day: {metric.change}</p>
+            <p className={`text-xs ${metric.rate !== null ? "text-muted-foreground" : "text-muted-foreground/60"}`}>
+              {metric.description}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      {/* Additional Metrics Row */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        {metrics.slice(3).map((metric, index) => (
+          <div key={index} className="bg-background p-5 rounded-xl border border-border">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-xs text-muted-foreground">{metric.label}</p>
+              {metric.rate !== null && metric.rate > 0 && (
+                <TrendingUp className="w-4 h-4 text-success" />
+              )}
+            </div>
+            <p className="text-3xl font-bold text-foreground mb-1">{metric.value}</p>
+            <p className={`text-xs ${metric.rate !== null ? "text-muted-foreground" : "text-muted-foreground/60"}`}>
+              {metric.description}
+            </p>
           </div>
         ))}
       </div>
