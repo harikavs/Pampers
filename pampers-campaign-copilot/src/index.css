@@ -11,7 +11,7 @@ All colors MUST be HSL.
     /* Pampers Brand Colors */
     --pampers-teal: 174 100% 36%;
     --pampers-teal-dark: 182 100% 29%;
-    --pampers-blue: 217 91% 60%;
+    --pampers-blue: 174 100% 36%;
     --pampers-yellow: 43 89% 67%;
     
     /* Base colors */
@@ -33,7 +33,7 @@ All colors MUST be HSL.
     --muted: 220 13% 91%;
     --muted-foreground: 217 33% 17%;
 
-    --accent: 217 91% 60%;
+    --accent: 174 100% 36%;
     --accent-foreground: 0 0% 100%;
 
     --success: 160 84% 39%;
