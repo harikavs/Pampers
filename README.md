@@ -1,12 +1,51 @@
 # Pampers-campaign
 
-## ARM & Scalability
+## Our system reduces campaign creation time from 3-5 days to under 60 seconds. These are MASSIVE benefits for P & G as it reduces the manual workload, consistent quality across countries, faster experimentation, Better performance through AI insights, and Empowerment for small local teams who lack CRM specialists. 
 
-Our backend is containerized using a lightweight Node.js image (`node:20-alpine`) which supports ARM architectures out of the box (e.g., AWS Graviton instances, ARM-based MacBooks, and edge devices).
+Pampers Campaign Copilot transforms a marketer’s one-line brief into a fully built, multi-country Braze campaign with copy, journey, QA, and hypercare insights — all powered by a modular TypeScript AI engine and deployable on ARM infrastructure.
 
-This means Pampers Campaign Copilot can be deployed on ARM-based cloud infrastructure to:
-- reduce compute cost per campaign,
-- improve performance per watt,
-- and run closer to local markets in a scalable way.
+## Technical Architecture
 
-Thanks to this, the same AI-powered campaign engine that drives Braze automation can efficiently support 20+ countries from ARM-optimized infrastructure.
+Frontend: React + Vite + TypeScript
+
+React with TypeScript
+
+Tailwind + shadcn/ui for polished UI
+
+Pages for Chat, Simulation, QA, Go-Live, Hypercare
+
+API client under src/lib/api.ts
+
+Componentized dashboard (cards, charts, inputs, sections)
+
+Built with Cursor & Lovable for rapid iteration
+
+Backend: Node.js + Express + TypeScript
+
+The core AI engine lives in backend/ai/:
+
+campaignInterpreter.ts → converts brief → spec
+
+journeyBuilder.ts → builds multi-step cross-market flow
+
+copyGenerator.ts → generates localized channel copy
+
+qaEngine.ts → checks campaign quality
+
+index.ts → orchestrates entire pipeline
+
+Endpoints:
+
+POST /api/chat → returns spec + journey + copy + QA
+
+POST /api/go-live → simulates Braze launch
+
+GET /api/hypercare/:id → returns metrics + AI insights
+
+Braze Integration
+
+Mock Braze client following real REST API schema
+
+EU-01 cluster-compatible endpoint structure
+
+Demonstrates how P&G could fully automate Braze Canvas creation
