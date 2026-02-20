@@ -49,10 +49,3 @@ EU-01 cluster-compatible endpoint structure
 
 Demonstrates how P&G could fully automate Braze Canvas creation
 
-A bit of how the UI/UX looks like when accessing the website: 
-
-<img width="2519" height="1080" alt="image" src="https://github.com/user-attachments/assets/64ec54ed-1a58-47ae-acfd-bfe55116a15c" />
-
-Active Campaign View: 
-<img width="2036" height="995" alt="image" src="https://github.com/user-attachments/assets/21e1b22f-6850-42dc-a06b-edfac6ffbd5f" />
-
